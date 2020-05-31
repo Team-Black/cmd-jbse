@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'idea'
+    id 'ca.coglinc2.javacc' version '3.0.0'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs "C:/Program Files/AdoptOpenJDK/jdk-8.0.252.09-hotspot/lib", 'libs'
+    }
+}
+
+dependencies {
+    compile group: 'com.beust', name: 'jcommander', version: '1.78'
+    compile group: 'javassist', name: 'javassist', version: '3.12.1.GA'
+    compile files('C:/Users/I535031/Desktop/Study/Huawei-Project/JavaAutoTest/build/libs/jbse-0.10.0-SNAPSHOT-shaded.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task customFatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'org.Main'
+    }
+    baseName = 'all-in-one-jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
